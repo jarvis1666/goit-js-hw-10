@@ -47,8 +47,18 @@
 .hidden {
   display: none;
 }
+.cat-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-right: 50px;
+  margin-left: 50px;
+}
 .fotoCat {
+  display: block;
   padding-top: 30px;
-  margin-right: auto;
-  margin-left: auto;
+}
+.infoCat {
+  text-align: center;
 }
