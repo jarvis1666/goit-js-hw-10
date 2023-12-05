@@ -1,5 +1,5 @@
 import axios from 'axios';
-//бібліотека для обробки селекту
+// //бібліотека для обробки селекту
 
 //npm install slim-select
 import SlimSelect from 'slim-select';
@@ -30,17 +30,21 @@ fetchBreeds()
         item => `<option value="${item.id}">${item.name}</option>`
       )
       .join('');
-
-    return (breedSelection.innerHTML = selectMarkup);
+    breedSelection.innerHTML = selectMarkup;
+    new SlimSelect({
+      select: '.breed-select',
+    });
+    return;
   })
   .catch(error => {
     // ERROR.classList.remove('hidden');
     breedSelection.classList.add('hidden');
-    Notiflix.Notify.warning(
+    Notiflix.Notify.failure(
       'Oops! Something went wrong! Try reloading the page!'
     );
     console.log(error);
   });
+
 breedSelection.addEventListener('change', handleSelection);
 
 function handleSelection(event) {
@@ -69,13 +73,10 @@ function handleSelection(event) {
     })
     .catch(error => {
       console.log(error);
-      Notiflix.Notify.warning(
+      Notiflix.Notify.failure(
         'Oops! Something went wrong! Try reloading the page!'
       );
       //   ERROR.classList.remove('hidden');
       breedSelection.classList.add('hidden');
     });
 }
-new SlimSelect({
-  select: '.breed-select',
-});
