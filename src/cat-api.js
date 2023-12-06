@@ -9,12 +9,9 @@ const url = 'https://api.thecatapi.com/v1/breeds';
 function fetchBreeds() {
   return axios
     .get(url)
-    .then(
-      ({ data }) => {
-        return data;
-      }
-      // console.log(response.data)
-    )
+    .then(({ data }) => {
+      return data;
+    })
     .catch(error => {
       throw new Error(error);
     }); // Викидаємо помилку для обробки вище
@@ -32,5 +29,5 @@ function fetchCatByBreed(breedId) {
       console.log(error);
     });
 }
-// При необхідності можна додати експорт функції
+//  додаємо експорт функції
 export { fetchBreeds, fetchCatByBreed };

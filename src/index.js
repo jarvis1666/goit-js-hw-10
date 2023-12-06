@@ -1,11 +1,6 @@
 import axios from 'axios';
-// //бібліотека для обробки селекту
-
-//npm install slim-select
 import SlimSelect from 'slim-select';
-import '/node_modules/slim-select/dist/slimselect.css';
-//npm i notiflix
-
+import 'slim-select/dist/slimselect.css';
 import Notiflix from 'notiflix';
 import { fetchBreeds, fetchCatByBreed } from './cat-api';
 
@@ -25,10 +20,7 @@ fetchBreeds()
     loading.classList.add('hidden');
     breedSelection.classList.remove('hidden');
     const selectMarkup = resolve
-      .map(
-        //додаємо котиків
-        item => `<option value="${item.id}">${item.name}</option>`
-      )
+      .map(item => `<option value="${item.id}">${item.name}</option>`)
       .join('');
     breedSelection.innerHTML = selectMarkup;
     new SlimSelect({
@@ -37,7 +29,6 @@ fetchBreeds()
     return;
   })
   .catch(error => {
-    // ERROR.classList.remove('hidden');
     breedSelection.classList.add('hidden');
     Notiflix.Notify.failure(
       'Oops! Something went wrong! Try reloading the page!'
@@ -48,35 +39,44 @@ fetchBreeds()
 breedSelection.addEventListener('change', handleSelection);
 
 function handleSelection(event) {
-  loading.classList.add('hidden');
-  breedSelection.classList.remove('hidden');
-  //   ERROR.classList.add('hidden');
+  loading.classList.remove('hidden');
+  breedSelection.classList.add('hidden');
+  ERROR.classList.add('hidden');
 
   const breedId = event.target.value;
+  informationForCat.innerHTML = ''; // Очистимо попередню інформацію про кота
+
   fetchCatByBreed(breedId)
     .then(catData => {
       loading.classList.add('hidden');
       breedSelection.classList.remove('hidden');
-      //   ERROR.classList.add('hidden');
+
+      if (!catData || !catData.breeds || catData.breeds.length === 0) {
+        Notiflix.Notify.failure(
+          'Oops! Something went wrong! Try reloading the page!'
+        );
+        return;
+      }
 
       const { breeds, url } = catData;
       const { description, name, temperament } = breeds[0];
       const catInfo = `
-            <img class = "fotoCat" src = "${url}" alt = "${name}" width ="500" heght ="400">
-            <div class = "infoCat">
+            <img class="fotoCat" src="${url}" alt="${name}" width="500" height="400">
+            <div class="infoCat">
                 <h1>${name}</h1>
                 <p>${description}</p>
                 <h3>${temperament}</h3>
             </div>
             `;
-      return (informationForCat.innerHTML = catInfo);
+      informationForCat.innerHTML = catInfo;
     })
     .catch(error => {
       console.log(error);
       Notiflix.Notify.failure(
         'Oops! Something went wrong! Try reloading the page!'
       );
-      //   ERROR.classList.remove('hidden');
       breedSelection.classList.add('hidden');
+      loading.classList.add('hidden');
+      ERROR.classList.remove('hidden');
     });
 }
